@@ -1,0 +1,1 @@
+# inventory_management_sys_django_final_group_project
