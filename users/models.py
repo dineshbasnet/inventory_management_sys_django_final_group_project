@@ -14,7 +14,7 @@ class User(AbstractUser):
     phone = models.CharField(max_length=10,blank=True)
 
     USERNAME_FIELD  = 'email'
-    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
+    REQUIRED_FIELDS = ['username']
 
     class Meta:
         db_table = 'users'

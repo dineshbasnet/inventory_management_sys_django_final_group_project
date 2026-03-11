@@ -17,7 +17,7 @@ class LoginView(TokenObtainPairView):
 
 
 class RegisterView(generics.CreateAPIView):
-    """POST /api/auth/register/ — create a new user (admin only)."""
+    """POST /api/auth/register/ -- create a new user (admin only)."""
     serializer_class = RegisterSerializer
     permission_classes = [IsAdminUser]
 
