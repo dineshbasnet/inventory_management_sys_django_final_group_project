@@ -41,4 +41,9 @@ urlpatterns = [
     # Auth
     path('api/auth/', include('users.urls')),
     path('api/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+     path('api/products/', include('products.urls')),
+     path('api/suppliers/',include('suppliers.urls')),
+        #   path('api/stock/',include('stock.urls')),
+
+
 ]
