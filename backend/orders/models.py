@@ -1,8 +1,8 @@
 from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator
-from apps.products.models import Product
-from apps.suppliers.models import Supplier
+from products.models import Product
+from suppliers.models import Supplier
 
 
 class PurchaseOrder(models.Model):
@@ -13,7 +13,7 @@ class PurchaseOrder(models.Model):
         RECEIVED  = 'received',  'Received'
         CANCELLED = 'cancelled', 'Cancelled'
 
-    order_number       = models.CharField(max_length=50, unique=True)
+    order_number = models.CharField(max_length=50, unique=True)
     supplier           = models.ForeignKey(Supplier, on_delete=models.PROTECT,
                                            related_name='purchase_orders')
     status             = models.CharField(max_length=20, choices=Status.choices,
