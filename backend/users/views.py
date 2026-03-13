@@ -16,19 +16,22 @@ class LoginView(APIView):
 
     def post(self, request):
         from django.contrib.auth import authenticate
-        email    = request.data.get('email')
-        password = request.data.get('password')
-        user     = authenticate(request, email=email, password=password)
+
+        email = request.data.get("email")
+        password = request.data.get("password")
+        user = authenticate(request, email=email, password=password)
         if not user:
-            return Response({'error': 'Invalid credentials'}, status=400)
+            return Response({"error": "Invalid credentials"}, status=400)
         if not user.is_active:
-            return Response({'error': 'Account is inactive'}, status=403)
+            return Response({"error": "Account is inactive"}, status=403)
         refresh = RefreshToken.for_user(user)
-        return Response({
-            'access':  str(refresh.access_token),
-            'refresh': str(refresh),
-            'user':    UserSerializer(user).data,
-        })
+        return Response(
+            {
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
+                "user": UserSerializer(user).data,
+            }
+        )
 
 
 class LogoutView(APIView):
@@ -36,11 +39,11 @@ class LogoutView(APIView):
 
     def post(self, request):
         try:
-            token = RefreshToken(request.data.get('refresh'))
+            token = RefreshToken(request.data.get("refresh"))
             token.blacklist()
-            return Response({'message': 'Logged out successfully'})
+            return Response({"message": "Logged out successfully"})
         except TokenError:
-            return Response({'error': 'Invalid token'}, status=400)
+            return Response({"error": "Invalid token"}, status=400)
 
 
 class RegisterView(APIView):
@@ -65,7 +68,7 @@ class UserListView(APIView):
     permission_classes = [IsAdminUser]
 
     def get(self, request):
-        users = User.objects.all().order_by('-date_joined')
+        users = User.objects.all().order_by("-date_joined")
         return Response(UserSerializer(users, many=True).data)
 
 
@@ -77,18 +80,18 @@ class UserDetailView(APIView):
             user = User.objects.get(pk=pk)
             return Response(UserSerializer(user).data)
         except User.DoesNotExist:
-            return Response({'error': 'User not found'}, status=404)
+            return Response({"error": "User not found"}, status=404)
 
     def patch(self, request, pk):
         try:
             user = User.objects.get(pk=pk)
         except User.DoesNotExist:
-            return Response({'error': 'User not found'}, status=404)
+            return Response({"error": "User not found"}, status=404)
 
         serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             # Handle password separately
-            password = request.data.get('password')
+            password = request.data.get("password")
             if password:
                 user.set_password(password)
                 user.save()
@@ -102,4 +105,4 @@ class UserDetailView(APIView):
             user.delete()
             return Response(status=204)
         except User.DoesNotExist:
-            return Response({'error': 'User not found'}, status=404)
+            return Response({"error": "User not found"}, status=404)

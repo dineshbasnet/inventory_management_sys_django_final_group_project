@@ -6,13 +6,13 @@ from core.permissions.roles import IsManagerOrAdmin, IsAnyStaff
 
 
 class SupplierViewSet(viewsets.ModelViewSet):
- 
-    queryset         = Supplier.objects.all()
+
+    queryset = Supplier.objects.all()
     serializer_class = SupplierSerializer
-    filter_backends  = [SearchFilter]
-    search_fields    = ['name', 'company', 'email']
+    filter_backends = [SearchFilter]
+    search_fields = ["name", "company", "email"]
 
     def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+        if self.action in ["create", "update", "partial_update", "destroy"]:
             return [IsManagerOrAdmin()]
         return [IsAnyStaff()]

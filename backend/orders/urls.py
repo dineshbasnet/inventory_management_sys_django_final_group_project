@@ -5,4 +5,6 @@ from .views import PurchaseOrderViewSet
 router = DefaultRouter()
 router.register('purchase-orders', PurchaseOrderViewSet, basename='purchase-order')
 
-urlpatterns = [path('', include(router.urls))]
+urlpatterns = [
+    path('', include(router.urls)),
+]

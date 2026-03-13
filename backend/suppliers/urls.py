@@ -3,6 +3,6 @@ from rest_framework.routers import DefaultRouter
 from .views import SupplierViewSet
 
 router = DefaultRouter()
-router.register('', SupplierViewSet, basename='supplier')
+router.register("", SupplierViewSet, basename="supplier")
 
-urlpatterns = [path('', include(router.urls))]
+urlpatterns = [path("", include(router.urls))]

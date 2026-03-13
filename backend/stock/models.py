@@ -10,9 +10,7 @@ class Stock(models.Model):
     """
 
     product = models.OneToOneField(
-        Product,
-        on_delete=models.CASCADE,
-        related_name="stock"
+        Product, on_delete=models.CASCADE, related_name="stock"
     )
     quantity = models.PositiveIntegerField(default=0)
     last_updated = models.DateTimeField(auto_now=True)
@@ -46,38 +44,24 @@ class StockMovement(models.Model):
         DAMAGE = "damage", "Damage / Loss"
 
     product = models.ForeignKey(
-        Product,
-        on_delete=models.PROTECT,
-        related_name="movements"
+        Product, on_delete=models.PROTECT, related_name="movements"
     )
 
-    movement_type = models.CharField(
-        max_length=20,
-        choices=MovementType.choices
-    )
+    movement_type = models.CharField(max_length=20, choices=MovementType.choices)
 
     quantity = models.IntegerField()  # +ve for stock in, -ve for stock out
     quantity_before = models.PositiveIntegerField()
     quantity_after = models.PositiveIntegerField()
 
-    reference = models.CharField(
-        max_length=200,
-        blank=True
-    )
+    reference = models.CharField(max_length=200, blank=True)
 
-    notes = models.TextField(
-        blank=True
-    )
+    notes = models.TextField(blank=True)
 
     performed_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.SET_NULL,
-        null=True
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
     )
 
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = "stock_movements"

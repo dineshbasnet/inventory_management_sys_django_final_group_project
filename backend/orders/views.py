@@ -1,59 +1,70 @@
-import uuid
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter
+from django.utils import timezone
 from .models import PurchaseOrder
 from .serializers import PurchaseOrderSerializer
 from core.permissions.roles import IsManagerOrAdmin, IsAnyStaff
 
 
 class PurchaseOrderViewSet(viewsets.ModelViewSet):
-
-    queryset = PurchaseOrder.objects.select_related(
-        'supplier', 'created_by'
-    ).prefetch_related('items__product').all()
+    queryset = (
+        PurchaseOrder.objects.select_related("supplier", "created_by", "approved_by")
+        .prefetch_related("items__product")
+        .all()
+    )
     serializer_class = PurchaseOrderSerializer
-    filter_backends  = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ['status', 'supplier']
-    search_fields    = ['order_number', 'supplier__name']
 
     def get_permissions(self):
-        if self.action == 'destroy':
+        if self.action in [
+            "create",
+            "update",
+            "partial_update",
+            "approve",
+            "receive",
+            "destroy",
+        ]:
             return [IsManagerOrAdmin()]
         return [IsAnyStaff()]
 
     def perform_create(self, serializer):
-        order_number = f"PO-{uuid.uuid4().hex[:8].upper()}"
-        serializer.save(created_by=self.request.user, order_number=order_number)
+        serializer.save(created_by=self.request.user)
 
-    @action(detail=True, methods=['post'], permission_classes=[IsManagerOrAdmin])
+    @action(detail=True, methods=["post"])
     def approve(self, request, pk=None):
-        """Approve a pending order."""
         order = self.get_object()
-        if order.status != PurchaseOrder.Status.PENDING:
-            return Response({'error': 'Only pending orders can be approved.'},
-                            status=status.HTTP_400_BAD_REQUEST)
-        order.status = PurchaseOrder.Status.APPROVED
+        if order.status != "pending":
+            return Response(
+                {"error": "Only pending orders can be approved."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        order.status = "approved"
+        order.approved_by = request.user
+        order.approved_at = timezone.now()
         order.save()
         return Response(PurchaseOrderSerializer(order).data)
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=["post"])
     def receive(self, request, pk=None):
-        """Receive order and automatically add stock for each item."""
-        from apps.stock.services import StockService
         order = self.get_object()
-        if order.status not in [PurchaseOrder.Status.APPROVED, PurchaseOrder.Status.PENDING]:
-            return Response({'error': 'Order must be approved or pending to receive.'},
-                            status=status.HTTP_400_BAD_REQUEST)
+        if order.status != "approved":
+            return Response(
+                {"error": "Only approved orders can be received."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        order.status = "received"
+        order.received_at = timezone.now()
+        order.save()
+
+        from stock.services import StockService
+
         for item in order.items.all():
             StockService.add_stock(
                 product=item.product,
                 quantity=item.quantity,
-                reference=f"Purchase Order: {order.order_number}",
+                reference=order.order_number,
+                notes=f"Received from PO {order.order_number}",
                 user=request.user,
             )
-        order.status = PurchaseOrder.Status.RECEIVED
-        order.save()
-        return Response({'message': 'Order received. Stock has been updated.'})
+
+        return Response(PurchaseOrderSerializer(order).data)
