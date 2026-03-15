@@ -10,8 +10,6 @@ A complete walkthrough of the application is available at the link below. The vi
 
 Video Link: https://www.loom.com/share/5e291417d2124b8f956db2a5c4eb0c65
 
-> Replace the link above with your actual video URL before submitting.
-
 ---
 
 ## Table of Contents
@@ -315,9 +313,9 @@ npm run dev
 | Name | Student ID | Branch | Responsibility |
 |------|------------|--------|---------------|
 | Dinesh Basnet | -- | feature/users-auth, feature/frontend-auth | Project lead, authentication, user management, project setup, frontend base layout |
-| Member 2 | -- | feature/products-suppliers, feature/frontend-products | Products app, categories app, suppliers app, frontend products and categories pages |
-| Member 3 | -- | feature/orders, feature/frontend-orders | Orders app, frontend orders and suppliers pages |
-| Member 4 | -- | feature/stock-reports, feature/frontend-stock | Stock app, reports app, frontend stock, reports, and dashboard pages |
+| Bibek Yadav | -- | feature/products-suppliers, feature/frontend-products | Products app, categories app, suppliers app, frontend products and categories pages |
+| Roshan Mandal | -- | feature/orders, feature/frontend-orders | Orders app, frontend orders and suppliers pages |
+| Jay Prakash Yadav | -- | feature/stock-reports, feature/frontend-stock | Stock app, reports app, frontend stock, reports, and dashboard pages |
 
 ---
 
