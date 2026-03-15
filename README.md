@@ -312,10 +312,10 @@ npm run dev
 
 | Name | Student ID | Branch | Responsibility |
 |------|------------|--------|---------------|
-| Dinesh Basnet | -- | feature/users-auth, feature/frontend-auth | Project lead, authentication, user management, project setup, frontend base layout |
-| Bibek Yadav | -- | feature/products-suppliers, feature/frontend-products | Products app, categories app, suppliers app, frontend products and categories pages |
-| Roshan Mandal | -- | feature/orders, feature/frontend-orders | Orders app, frontend orders and suppliers pages |
-| Jay Prakash Yadav | -- | feature/stock-reports, feature/frontend-stock | Stock app, reports app, frontend stock, reports, and dashboard pages |
+| Dinesh Basnet | 11 | feature/users-auth, feature/frontend-auth | Project lead, authentication, user management, project setup, frontend base layout |
+| Bibek Yadav | 6 | feature/products-suppliers, feature/frontend-products | Products app, categories app, suppliers app, frontend products and categories pages |
+| Roshan Mandal | 38 | feature/orders, feature/frontend-orders | Orders app, frontend orders and suppliers pages |
+| Jay Prakash Yadav | 15 | feature/stock-reports, feature/frontend-stock | Stock app, reports app, frontend stock, reports, and dashboard pages |
 
 ---
 
